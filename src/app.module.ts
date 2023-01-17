@@ -10,11 +10,12 @@ import { LikesModule } from './likes/likes.module';
 import { CommentsModule } from './comments/comments.module';
 import { SettingModule } from './setting/setting.module';
 import MySQLConfig from '../ormMySQLConfig';
+import config from '../ormConfig';
 
 @Module({
   imports: [
     UsersModule,
-    TypeOrmModule.forRoot(MySQLConfig),
+    TypeOrmModule.forRoot(config),
     AuthModule,
     PostsModule,
     LikesModule,
