@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength } from 'class-validator';
 
-export class CreateCommentDto {
+export class CommentDto {
   @ApiProperty()
   @IsNotEmpty()
   @MaxLength(50)

@@ -17,6 +17,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { NoAuth } from '../auth/no-auth.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -28,22 +29,27 @@ export class UsersController {
   index(): Promise<User[]> {
     return this.usersService.obtainAllData();
   }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.storeData(createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   get(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.obtainData(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number): string {
     return this.usersService.remove(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,

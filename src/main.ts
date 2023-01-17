@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Task 1 Api')
     .setDescription('The description of Task1 Api')
     .setVersion('1.0')
+    .addBearerAuth({ in: 'header', type: 'http' })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
