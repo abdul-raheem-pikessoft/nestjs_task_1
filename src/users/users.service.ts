@@ -79,9 +79,10 @@ export class UsersService {
       this.usersRepository.update(
         { id },
         {
-          name: updateUserDto.name,
-          email: updateUserDto.email,
-          password: this.hashingPassword(updateUserDto.password),
+          ...updateUserDto,
+          password: updateUserDto.password
+            ? this.hashingPassword(updateUserDto.password)
+            : undefined,
         },
       );
       return { message: 'User is updated!' };

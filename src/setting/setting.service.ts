@@ -3,13 +3,25 @@ import { SettingDto } from './dto/setting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Setting } from './entities/setting.entities';
+import { Like } from '../likes/entities/likes.entities';
 
 @Injectable()
 export class SettingService {
   constructor(
     @InjectRepository(Setting) private settingRepository: Repository<Setting>,
   ) {}
-  create(settingDto: SettingDto, user): any {
+  async create(settingDto: SettingDto, user): Promise<any> {
+    const userSetting = await this.settingRepository
+      .createQueryBuilder()
+      .select('settings')
+      .from(Setting, 'settings')
+      .where('settings.userId = :userId', {
+        userId: user.id,
+      })
+      .getOne();
+    if (userSetting) {
+      return 'already user setting ceeated';
+    }
     const setting = this.settingRepository.create({
       notification: settingDto.notification,
     });

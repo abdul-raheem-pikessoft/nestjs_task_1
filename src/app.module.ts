@@ -11,6 +11,9 @@ import { CommentsModule } from './comments/comments.module';
 import { SettingModule } from './setting/setting.module';
 import MySQLConfig from '../ormMySQLConfig';
 import config from '../ormConfig';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -21,8 +24,15 @@ import config from '../ormConfig';
     LikesModule,
     CommentsModule,
     SettingModule,
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

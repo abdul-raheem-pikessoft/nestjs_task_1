@@ -19,7 +19,6 @@ export class Like {
   user: User;
 
   @ManyToOne(() => Post, (post) => post.likes, {
-    eager: true,
     onDelete: 'CASCADE',
   })
   post: Post;

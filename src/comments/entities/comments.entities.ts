@@ -20,8 +20,8 @@ export class Comment {
   user: User;
 
   @ManyToOne(() => Post, (post) => post.comments, {
-    onDelete: 'CASCADE',
     eager: true,
+    onDelete: 'CASCADE',
   })
   post: Post;
 

@@ -21,7 +21,9 @@ export class AuthService {
   async login(signinDto: SigninDto): Promise<any> {
     const user = await this.validateUser(signinDto.email, signinDto.password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        message: 'email or password is invalid',
+      });
     }
     const payload = { name: user.name, sub: user.id };
     return {

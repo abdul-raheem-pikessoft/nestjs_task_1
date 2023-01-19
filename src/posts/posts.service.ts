@@ -12,8 +12,7 @@ export class PostsService {
   ) {}
   store(createPostDto: CreatePostDto, user): Promise<Post> {
     const post = this.postsRepository.create({
-      title: createPostDto.title,
-      description: createPostDto.description,
+      ...createPostDto,
     });
     post.user = user;
     return this.postsRepository.save(post);
@@ -26,6 +25,15 @@ export class PostsService {
       .take(take)
       .skip(skip)
       .getMany();
+  }
+
+  async find(id): Promise<Post> {
+    const post = await this.checkThePostExists(id);
+    if (!post) {
+      throw new NotFoundException();
+    } else {
+      return post;
+    }
   }
 
   delete(id): any {

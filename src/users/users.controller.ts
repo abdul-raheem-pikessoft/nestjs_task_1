@@ -4,57 +4,117 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/users.entities';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
-import { ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { NoAuth } from '../auth/no-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiBearerAuth()
 @ApiTags('Users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard)
   @Get()
   index(): Promise<User[]> {
-    return this.usersService.obtainAllData();
+    try {
+      return this.usersService.obtainAllData();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.storeData(createUserDto);
+    try {
+      return this.usersService.storeData(createUserDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   get(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.usersService.obtainData(id);
+    try {
+      return this.usersService.obtainData(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number): string {
-    return this.usersService.remove(id);
+    try {
+      return this.usersService.remove(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): any {
-    return this.usersService.update(id, updateUserDto);
+    try {
+      return this.usersService.update(id, updateUserDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 }

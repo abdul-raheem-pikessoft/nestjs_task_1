@@ -29,19 +29,13 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Post, (post) => post.user, {
-    eager: true,
-  })
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => Like, (like) => like.user, {
-    eager: true,
-  })
+  @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 
-  @OneToMany(() => Comment, (comment) => comment.user, {
-    eager: true,
-  })
+  @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
   @CreateDateColumn()
